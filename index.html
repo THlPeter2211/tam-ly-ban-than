@@ -4,22 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang web Tư vấn Tâm lý Nâng cấp</title>
+    <title>Trang web Tư vấn Tâm lý - Menu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f4f9f4; transition: all 0.3s; }
-        .hero { background: url('https://via.placeholder.com/1200x400?text=Khám+phá+bản+thân') center/cover; color: white; padding: 80px 0; text-align: center; animation: fadeIn 1s; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f9f4; }
+        .hero { background: url('https://via.placeholder.com/1200x400?text=Khám+phá+bản+thân') center/cover; color: white; padding: 100px 0; text-align: center; }
         .hero h1 { font-size: 2.5rem; }
         .btn-custom { background-color: #4caf50; color: white; font-weight: bold; margin: 5px; transition: transform 0.2s; }
         .btn-custom:hover { transform: scale(1.05); }
-        .section { padding: 40px 0; text-align: center; }
-        .section h2 { color: #2e7d32; }
-        .card { margin: 10px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .suggestions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .journal-entry { margin: 10px 0; padding: 10px; background: #e8f5e9; border-radius: 5px; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        canvas { border: 1px solid #ccc; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -27,301 +19,29 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">Tâm Lý & Bản Thân</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Trang chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#chatbot">Chatbot</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#library">Thư viện</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#community">Cộng đồng</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#journal">Nhật ký</a></li>
-                </ul>
-            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
-            <h1>Khám phá bản thân, vượt qua khó khăn!</h1>
-            <p>Dựa trên Lý thuyết sự khác biệt bản thân.</p>
-            <a href="#chatbot" class="btn btn-custom">Chatbot</a>
-            <a href="#library" class="btn btn-custom">Thư viện</a>
-            <a href="#community" class="btn btn-custom">Chia sẻ</a>
-            <a href="#journal" class="btn btn-custom">Nhật ký</a>
+            <h1>Chào mừng đến với Tâm Lý & Bản Thân!</h1>
+            <p>Khám phá bản thân và chia sẻ hành trình của bạn.</p>
+            <a href="community.html" class="btn btn-custom">Cộng đồng Chia sẻ</a>
+            <a href="journal.html" class="btn btn-custom">Nhật ký Tâm lý</a>
         </div>
     </section>
 
-    <!-- Chatbot Section -->
-    <section id="chatbot" class="section">
+    <footer class="bg-light py-4 text-center">
         <div class="container">
-            <h2>Chatbot Tư vấn</h2>
-            <p>Nhận gợi ý tâm lý ngay lập tức!</p>
-            <input id="user-input" type="text" class="form-control" placeholder="VD: Làm sao để bớt căng thẳng?">
-            <div class="suggestions">
-                <button class="btn btn-outline-success btn-sm" onclick="suggest('Giảm stress')">Giảm stress</button>
-                <button class="btn btn-outline-success btn-sm" onclick="suggest('Tăng tự tin')">Tăng tự tin</button>
-                <button class="btn btn-outline-success btn-sm" onclick="suggest('Học tập hiệu quả')">Học tập</button>
-            </div>
-            <button id="chatbot-button" class="btn btn-custom mt-2">Gửi</button>
-            <p id="chatbot-response" class="mt-3"></p>
-            <p id="chat-history" class="mt-2" style="font-size: 0.9rem;"></p>
-        </div>
-    </section>
-
-    <!-- Library Section -->
-    <section id="library" class="section bg-light">
-        <div class="container">
-            <h2>Thư viện Tài liệu</h2>
-            <p>Khám phá tài liệu về tâm lý học.</p>
-            <div id="library" class="row"></div>
-            <button id="summarize-btn" class="btn btn-custom mt-2" style="display:none;">Tóm tắt</button>
-            <p id="summary" class="mt-2"></p>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="section">
-        <div class="container">
-            <h2>Cộng đồng Chia sẻ</h2>
-            <p>Chia sẻ hành trình của bạn!</p>
-            <textarea id="post-content" class="form-control" placeholder="Câu chuyện của bạn..."></textarea>
-            <button id="post-button" class="btn btn-custom mt-2">Đăng</button>
-            <div id="community" class="mt-3"></div>
-        </div>
-    </section>
-
-    <!-- Journal Section -->
-    <section id="journal" class="section bg-light">
-        <div class="container">
-            <h2>Nhật ký Tâm lý</h2>
-            <p>Ghi chú cảm xúc hàng ngày của bạn.</p>
-            <input id="journal-date" type="date" class="form-control mb-2">
-            <textarea id="journal-entry" class="form-control" placeholder="Cảm xúc hôm nay..."></textarea>
-            <button id="save-journal" class="btn btn-custom mt-2">Lưu</button>
-            <div id="journal-list" class="mt-3"></div>
-            <canvas id="emotion-chart" width="400" height="200"></canvas>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-light py-4">
-        <div class="container text-center">
             <p>&copy; 2025 Dự án Tâm lý & Bản thân.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module">
-        // Firebase Config (Thay bằng cấu hình của bạn)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCJOhNyw0XXxhqe0ZXvbfgt7eZSDDBB9C0",
-            authDomain: "tam-ly-ban-than.firebaseapp.com",
-            projectId: "tam-ly-ban-than",
-            storageBucket: "tam-ly-ban-than.firebasestorage.app",
-            messagingSenderId: "559346361379",
-            appId: "1:559346361379:web:7983e3db4c0e477799fd96"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Gemini API
-        async function callGeminiAPI(message) {
-            const apiKey = "AIzaSyA-rWmr0WIaJPAcbZUA9rKGr3wml9iBpyc";
-            try {
-                const response = await axios.post(
-                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-                    { contents: [{ parts: [{ text: `Bạn là chatbot tư vấn tâm lý. Trả lời ngắn gọn, tích cực, dễ hiểu: ${message}` }] }] }
-                );
-                const data = response.data;
-                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
-                    return data.candidates[0].content.parts[0].text;
-                }
-                return "Không nhận được phản hồi hợp lệ.";
-            } catch (error) {
-                console.error("Lỗi API:", error);
-                return "Có lỗi, thử lại sau!";
-            }
-        }
-
-        // Chatbot
-        function suggest(text) {
-            document.getElementById('user-input').value = text;
-        }
-        document.getElementById('chatbot-button').addEventListener('click', async () => {
-            const userInput = document.getElementById('user-input').value;
-            if (userInput) {
-                document.getElementById('chatbot-response').textContent = "Đang xử lý...";
-                const response = await callGeminiAPI(userInput);
-                const history = document.getElementById('chat-history').textContent + `\nQ: ${userInput} - A: ${response}`;
-                document.getElementById('chat-history').textContent = history.slice(-100);
-                document.getElementById('chatbot-response').textContent = response;
-                localStorage.setItem('chatHistory', history);
-            } else {
-                document.getElementById('chatbot-response').textContent = "Vui lòng nhập câu hỏi!";
-            }
-        });
-        document.getElementById('user-input').value = localStorage.getItem('chatHistory')?.split('\n').pop()?.split(' - ')[0] || '';
-
-        // Library
-        async function summarizeDocument(text) {
-            const apiKey = "AIzaSyA-rWmr0WIaJPAcbZUA9rKGr3wml9iBpyc";
-            try {
-                const response = await axios.post(
-                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-                    { contents: [{ parts: [{ text: `Tóm tắt đoạn văn sau thành 50 từ hoặc ít hơn: ${text}` }] }] }
-                );
-                const data = response.data;
-                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
-                    return data.candidates[0].content.parts[0].text;
-                }
-                return "Không tóm tắt được.";
-            } catch (error) {
-                console.error("Lỗi API:", error);
-                return "Lỗi khi tóm tắt.";
-            }
-        }
-        document.getElementById('library').innerHTML = `
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">5 cách giảm lo âu</h5>
-                        <p class="card-text" id="summary-text"></p>
-                        <a href="YOUR_GOOGLE_DRIVE_LINK" class="btn btn-custom">Đọc ngay</a>
-                        <button class="btn btn-custom mt-2" onclick="summarize('Nội dung tài liệu về cách giảm lo âu: Thở sâu, thiền, viết nhật ký, tập thể dục, trò chuyện với bạn bè.')">Tóm tắt</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        function summarize(text) {
-            summarizeDocument(text).then(summary => {
-                document.getElementById('summary-text').textContent = summary;
-            });
-        }
-
-        // Community
-        document.getElementById('post-button').addEventListener('click', async () => {
-    const postContent = document.getElementById('post-content').value;
-    if (postContent) {
-        const sentiment = await callGeminiAPI(`Phân tích cảm xúc của đoạn văn sau và trả lời ngắn gọn chỉ với "Tích cực", "Tiêu cực", hoặc "Trung tính": ${postContent}`);
-        if (sentiment.includes("Tiêu cực")) {
-            alert("Vui lòng chia sẻ nội dung tích cực hơn!");
-        } else {
-            const docRef = await addDoc(collection(db, "posts"), { 
-                content: postContent, 
-                likes: 0, 
-                comments: [], 
-                timestamp: new Date().toISOString() 
-            });
-            console.log("Bài đăng được lưu với ID:", docRef.id);
-            loadPosts();
-        }
-    }
-});
-        async function loadPosts() {
-            const querySnapshot = await getDocs(collection(db, "posts"));
-            document.getElementById('community').innerHTML = '';
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                document.getElementById('community').innerHTML += `
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <p class="card-text">${data.content}</p>
-                            <button class="btn btn-sm btn-custom" onclick="likePost('${doc.id}', ${data.likes})">Thích (${data.likes})</button>
-                            <input id="comment-${doc.id}" class="form-control mt-2" placeholder="Bình luận...">
-                            <button class="btn btn-sm btn-custom mt-2" onclick="addComment('${doc.id}')">Gửi</button>
-                            <div id="comments-${doc.id}"></div>
-                        </div>
-                    </div>
-                `;
-                loadComments(doc.id, data.comments);
-            });
-        }
-        async function likePost(docId, likes) {
-            const postRef = doc(db, "posts", docId);
-            await updateDoc(postRef, { likes: likes + 1 });
-            loadPosts();
-        }
-        async function addComment(docId) {
-            const comment = document.getElementById(`comment-${docId}`).value;
-            if (comment) {
-                const postRef = doc(db, "posts", docId);
-                const postSnap = await getDocs(collection(db, "posts"));
-                const data = postSnap.docs.find(d => d.id === docId).data();
-                await updateDoc(postRef, { comments: [...data.comments, comment] });
-                loadComments(docId, [...data.comments, comment]);
-                document.getElementById(`comment-${docId}`).value = '';
-            }
-        }
-        function loadComments(docId, comments) {
-            document.getElementById(`comments-${docId}`).innerHTML = comments.map(c => `<p class="mt-1">${c}</p>`).join('');
-        }
-        loadPosts();
-        const cleanSentiment = sentiment.trim().toLowerCase();
-if (cleanSentiment === "tich cuc" || cleanSentiment === "tích cực") {
-    // Lưu bài
-} else if (cleanSentiment === "tieu cuc" || cleanSentiment === "tiêu cực") {
-    alert("Vui lòng chia sẻ nội dung tích cực hơn!");
-} else {
-    // Lưu nếu trung tính
-}
-        // Journal
-        document.getElementById('save-journal').addEventListener('click', () => {
-            const date = document.getElementById('journal-date').value;
-            const entry = document.getElementById('journal-entry').value;
-            if (date && entry) {
-                const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-                entries.push({ date, entry, emotion: 5 }); // Mặc định emotion là 5 (trung bình)
-                localStorage.setItem('journal', JSON.stringify(entries));
-                document.getElementById('journal-entry').value = '';
-                loadJournal();
-            }
-        });
-        function loadJournal() {
-            const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-            document.getElementById('journal-list').innerHTML = entries.map(e => `
-                <div class="journal-entry">
-                    <strong>${e.date}</strong>: ${e.entry} (Cảm xúc: ${e.emotion}/10)
-                    <input type="range" min="1" max="10" value="${e.emotion}" onchange="updateEmotion('${e.date}', this.value)">
-                </div>
-            `).join('');
-            updateChart();
-        }
-        function updateEmotion(date, value) {
-            const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-            const entry = entries.find(e => e.date === date);
-            if (entry) entry.emotion = parseInt(value);
-            localStorage.setItem('journal', JSON.stringify(entries));
-            loadJournal();
-        }
-        function updateChart() {
-            const ctx = document.getElementById('emotion-chart').getContext('2d');
-            const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: entries.map(e => e.date),
-                    datasets: [{
-                        label: 'Cảm xúc (1-10)',
-                        data: entries.map(e => e.emotion),
-                        borderColor: '#4caf50',
-                        fill: false
-                    }]
-                },
-                options: { responsive: true }
-            });
-        }
-        loadJournal();
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
+
 
 
 
