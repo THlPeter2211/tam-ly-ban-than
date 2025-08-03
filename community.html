@@ -1,4 +1,4 @@
-
+<xaiArtifact artifact_id="c4d7c0b2-14fd-49c1-9b57-8ce2f923b998" artifact_version_id="eba06479-d0d6-48e1-9705-b5002cdb66dd" title="journal.html" contentType="text/html"
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -16,6 +16,7 @@
         .btn-custom:hover { transform: scale(1.05); }
         .post-title { font-size: 1.2rem; font-weight: bold; }
         .post-content { text-align: left; margin: 10px 0; }
+        .error-message { color: red; font-size: 0.9rem; display: none; }
     </style>
 </head>
 <body>
@@ -45,6 +46,7 @@
                 <input id="post-title" class="form-control mb-2" placeholder="Tiêu đề bài viết">
                 <textarea id="post-content" class="form-control mb-2" placeholder="Nội dung bài viết..."></textarea>
                 <button id="post-button" class="btn btn-custom">Đăng bài</button>
+                <div id="error-message" class="error-message"></div>
             </div>
             <!-- Post List -->
             <div id="post-list"></div>
@@ -60,7 +62,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module">
-        // Firebase Config (Thay bằng cấu hình của bạn)
+        // Firebase Config
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
@@ -70,7 +72,8 @@
             projectId: "tam-ly-ban-than",
             storageBucket: "tam-ly-ban-than.firebasestorage.app",
             messagingSenderId: "559346361379",
-            appId: "1:559346361379:web:7983e3db4c0e477799fd96"
+            appId: "1:559346361379:web:7983e3db4c0e477799fd96",
+            measurementId: "G-529YYLNVDR"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -90,6 +93,8 @@
                 return "trung tính";
             } catch (error) {
                 console.error("Lỗi API:", error);
+                document.getElementById('error-message').textContent = "Lỗi kết nối API. Vui lòng thử lại!";
+                document.getElementById('error-message').style.display = 'block';
                 return "trung tính";
             }
         }
@@ -98,69 +103,97 @@
         document.getElementById('post-button').addEventListener('click', async () => {
             const title = document.getElementById('post-title').value;
             const content = document.getElementById('post-content').value;
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'none';
+
             if (title && content) {
                 const fullText = `${title} ${content}`;
                 const sentiment = await callGeminiAPI(fullText);
                 if (sentiment === "tieu cuc" || sentiment === "tiêu cực") {
                     alert("Vui lòng chia sẻ nội dung tích cực hơn!");
                 } else {
-                    const docRef = await addDoc(collection(db, "posts"), {
-                        title: title,
-                        content: content,
-                        likes: 0,
-                        comments: [],
-                        timestamp: new Date().toISOString()
-                    });
-                    console.log("Bài viết được lưu với ID:", docRef.id);
-                    document.getElementById('post-title').value = '';
-                    document.getElementById('post-content').value = '';
-                    loadPosts();
+                    try {
+                        const docRef = await addDoc(collection(db, "posts"), {
+                            title: title,
+                            content: content,
+                            likes: 0,
+                            comments: [],
+                            timestamp: new Date().toISOString()
+                        });
+                        console.log("Bài viết được lưu với ID:", docRef.id);
+                        document.getElementById('post-title').value = '';
+                        document.getElementById('post-content').value = '';
+                        loadPosts();
+                    } catch (error) {
+                        console.error("Lỗi Firestore:", error);
+                        errorMessage.textContent = "Lỗi lưu bài viết. Kiểm tra kết nối!";
+                        errorMessage.style.display = 'block';
+                    }
                 }
             } else {
-                alert("Vui lòng nhập tiêu đề và nội dung!");
+                errorMessage.textContent = "Vui lòng nhập tiêu đề và nội dung!";
+                errorMessage.style.display = 'block';
             }
         });
 
         // Load Posts
         async function loadPosts() {
-            const querySnapshot = await getDocs(collection(db, "posts"));
-            const postList = document.getElementById('post-list');
-            postList.innerHTML = '';
-            querySnapshot.docs.sort((a, b) => b.data().timestamp.localeCompare(a.data().timestamp)).forEach((doc) => {
-                const data = doc.data();
-                postList.innerHTML += `
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="post-title">${data.title}</h5>
-                            <p class="post-content">${data.content.substring(0, 100)}${data.content.length > 100 ? '...' : ''}</p>
-                            <button class="btn btn-sm btn-custom" onclick="likePost('${doc.id}', ${data.likes})">Thích (${data.likes})</button>
-                            <input id="comment-${doc.id}" class="form-control mt-2" placeholder="Bình luận...">
-                            <button class="btn btn-sm btn-custom mt-2" onclick="addComment('${doc.id}')">Gửi</button>
-                            <div id="comments-${doc.id}" class="mt-1"></div>
+            try {
+                const querySnapshot = await getDocs(collection(db, "posts"));
+                const postList = document.getElementById('post-list');
+                postList.innerHTML = '';
+                querySnapshot.docs.sort((a, b) => b.data().timestamp.localeCompare(a.data().timestamp)).forEach((doc) => {
+                    const data = doc.data();
+                    postList.innerHTML += `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="post-title">${data.title}</h5>
+                                <p class="post-content">${data.content.substring(0, 100)}${data.content.length > 100 ? '...' : ''}</p>
+                                <button class="btn btn-sm btn-custom" onclick="likePost('${doc.id}', ${data.likes})">Thích (${data.likes})</button>
+                                <input id="comment-${doc.id}" class="form-control mt-2" placeholder="Bình luận...">
+                                <button class="btn btn-sm btn-custom mt-2" onclick="addComment('${doc.id}')">Gửi</button>
+                                <div id="comments-${doc.id}" class="mt-1"></div>
+                            </div>
                         </div>
-                    </div>
-                `;
-                loadComments(doc.id, data.comments);
-            });
+                    `;
+                    loadComments(doc.id, data.comments);
+                });
+            } catch (error) {
+                console.error("Lỗi tải bài viết:", error);
+                document.getElementById('error-message').textContent = "Lỗi tải danh sách bài viết!";
+                document.getElementById('error-message').style.display = 'block';
+            }
         }
 
         // Like Post
         async function likePost(docId, likes) {
-            const postRef = doc(db, "posts", docId);
-            await updateDoc(postRef, { likes: likes + 1 });
-            loadPosts();
+            try {
+                const postRef = doc(db, "posts", docId);
+                await updateDoc(postRef, { likes: likes + 1 });
+                loadPosts();
+            } catch (error) {
+                console.error("Lỗi like bài viết:", error);
+                document.getElementById('error-message').textContent = "Lỗi khi thích bài viết!";
+                document.getElementById('error-message').style.display = 'block';
+            }
         }
 
         // Add Comment
         async function addComment(docId) {
-            const comment = document.getElementById(`comment-${docId}`).value;
-            if (comment) {
-                const postRef = doc(db, "posts", docId);
-                const postSnap = await getDocs(collection(db, "posts"));
-                const data = postSnap.docs.find(d => d.id === docId)?.data() || { comments: [] };
-                await updateDoc(postRef, { comments: [...data.comments, comment] });
-                loadComments(docId, [...data.comments, comment]);
-                document.getElementById(`comment-${docId}`).value = '';
+            try {
+                const comment = document.getElementById(`comment-${docId}`).value;
+                if (comment) {
+                    const postRef = doc(db, "posts", docId);
+                    const postSnap = await getDocs(collection(db, "posts"));
+                    const data = postSnap.docs.find(d => d.id === docId)?.data() || { comments: [] };
+                    await updateDoc(postRef, { comments: [...data.comments, comment] });
+                    loadComments(docId, [...data.comments, comment]);
+                    document.getElementById(`comment-${docId}`).value = '';
+                }
+            } catch (error) {
+                console.error("Lỗi thêm bình luận:", error);
+                document.getElementById('error-message').textContent = "Lỗi khi thêm bình luận!";
+                document.getElementById('error-message').style.display = 'block';
             }
         }
 
@@ -174,3 +207,5 @@
     </script>
 </body>
 </html>
+
+
