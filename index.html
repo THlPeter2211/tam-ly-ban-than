@@ -207,17 +207,23 @@
 
         // Community
         document.getElementById('post-button').addEventListener('click', async () => {
-            const postContent = document.getElementById('post-content').value;
-            if (postContent) {
-                const sentiment = await callGeminiAPI(`Phân tích cảm xúc của: ${postContent} (trả về "Tích cực", "Tiêu cực", hoặc "Trung tính")`);
-                if (sentiment.includes("Tiêu cực")) {
-                    alert("Vui lòng chia sẻ nội dung tích cực hơn!");
-                } else {
-                    const docRef = await addDoc(collection(db, "posts"), { content: postContent, likes: 0, comments: [], timestamp: new Date() });
-                    loadPosts();
-                }
-            }
-        });
+    const postContent = document.getElementById('post-content').value;
+    if (postContent) {
+        const sentiment = await callGeminiAPI(`Phân tích cảm xúc của đoạn văn sau và trả lời ngắn gọn chỉ với "Tích cực", "Tiêu cực", hoặc "Trung tính": ${postContent}`);
+        if (sentiment.includes("Tiêu cực")) {
+            alert("Vui lòng chia sẻ nội dung tích cực hơn!");
+        } else {
+            const docRef = await addDoc(collection(db, "posts"), { 
+                content: postContent, 
+                likes: 0, 
+                comments: [], 
+                timestamp: new Date().toISOString() 
+            });
+            console.log("Bài đăng được lưu với ID:", docRef.id);
+            loadPosts();
+        }
+    }
+});
         async function loadPosts() {
             const querySnapshot = await getDocs(collection(db, "posts"));
             document.getElementById('community').innerHTML = '';
@@ -257,7 +263,14 @@
             document.getElementById(`comments-${docId}`).innerHTML = comments.map(c => `<p class="mt-1">${c}</p>`).join('');
         }
         loadPosts();
-
+        const cleanSentiment = sentiment.trim().toLowerCase();
+if (cleanSentiment === "tich cuc" || cleanSentiment === "tích cực") {
+    // Lưu bài
+} else if (cleanSentiment === "tieu cuc" || cleanSentiment === "tiêu cực") {
+    alert("Vui lòng chia sẻ nội dung tích cực hơn!");
+} else {
+    // Lưu nếu trung tính
+}
         // Journal
         document.getElementById('save-journal').addEventListener('click', () => {
             const date = document.getElementById('journal-date').value;
