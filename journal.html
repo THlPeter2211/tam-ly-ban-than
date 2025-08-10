@@ -1,4 +1,5 @@
-<xaiArtifact artifact_id="c4d7c0b2-14fd-49c1-9b57-8ce2f923b998" artifact_version_id="eba06479-d0d6-48e1-9705-b5002cdb66dd" title="journal.html" contentType="text/html">
+
+<xaiArtifact artifact_id="e9e918de-0046-48f4-b8bc-60fed999eefb" artifact_version_id="bb3a44a8-4a9a-46d1-adbe-f18c61e3ab5a" title="journal.html" contentType="text/html">
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -7,19 +8,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhật ký Tâm lý</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f4f9f4; }
-        .section { padding: 40px 0; text-align: center; }
-        .section h2 { color: #2e7d32; }
-        .journal-entry { margin: 10px 0; padding: 10px; background: #e8f5e9; border-radius: 5px; }
-        .btn-custom { background-color: #4caf50; color: white; font-weight: bold; margin: 5px; transition: transform 0.2s; }
-        .btn-custom:hover { transform: scale(1.05); }
-        canvas { border: 1px solid #ccc; margin-top: 10px; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a8dadc, #457b9d);
+            color: #1d3557;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .journal-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            padding: 20px;
+        }
+        .journal-header {
+            background: url('https://images.unsplash.com/photo-1501139083538-0139583c060f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') center/cover no-repeat;
+            color: white;
+            padding: 40px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            text-align: center;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+        .journal-header h2 {
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .journal-form {
+            padding: 20px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1d3557;
+        }
+        .form-control {
+            border-radius: 50px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .btn-custom {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+            padding: 10px 25px;
+            border-radius: 50px;
+            transition: transform 0.3s;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+        }
+        .journal-entries {
+            margin-top: 20px;
+        }
+        .entry-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .entry-card:hover {
+            transform: translateY(-3px);
+        }
+        nav {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .navbar-nav .nav-link {
+            font-size: 1.1rem;
+            margin-left: 15px;
+            color: #1d3557 !important;
+            transition: color 0.3s;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #4caf50 !important;
+        }
+        footer {
+            background: rgba(29,53,87,0.8);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">Tâm Lý & Bản Thân</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -29,79 +119,73 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link" href="community.html">Cộng đồng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="chatbot.html">Trò chuyện</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Journal Section -->
-    <section id="journal" class="section">
-        <div class="container">
+    <section class="journal-container">
+        <div class="journal-header">
             <h2>Nhật ký Tâm lý</h2>
-            <p>Ghi chú cảm xúc hàng ngày của bạn.</p>
-            <input id="journal-date" type="date" class="form-control mb-2">
-            <textarea id="journal-entry" class="form-control" placeholder="Cảm xúc hôm nay..."></textarea>
-            <button id="save-journal" class="btn btn-custom mt-2">Lưu</button>
-            <div id="journal-list" class="mt-3"></div>
-            <canvas id="emotion-chart" width="400" height="200"></canvas>
+            <p>Ghi lại cảm xúc và hành trình của bạn.</p>
+        </div>
+        <div class="journal-form">
+            <form id="journal-form">
+                <div class="mb-3">
+                    <label for="entry-date" class="form-label">Ngày</label>
+                    <input type="date" class="form-control" id="entry-date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="entry-text" class="form-label">Cảm xúc & Ghi chú</label>
+                    <textarea class="form-control" id="entry-text" rows="5" placeholder="Viết cảm xúc của bạn..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-custom">Lưu Nhật ký</button>
+            </form>
+            <div id="error-message" class="error-message mt-2"></div>
+        </div>
+        <div class="journal-entries" id="journal-entries">
+            <div class="loading">Đang tải nhật ký...</div>
         </div>
     </section>
 
-    <footer class="bg-light py-4 text-center">
+    <footer>
         <div class="container">
-            <p>&copy; 2025 Dự án Tâm lý & Bản thân.</p>
+            <p>&copy; 2025 Dự án Tâm lý & Bản Thân.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.getElementById('save-journal').addEventListener('click', () => {
-            const date = document.getElementById('journal-date').value;
-            const entry = document.getElementById('journal-entry').value;
-            if (date && entry) {
-                const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-                entries.push({ date, entry, emotion: 5 });
-                localStorage.setItem('journal', JSON.stringify(entries));
-                document.getElementById('journal-entry').value = '';
-                loadJournal();
+        // Placeholder JavaScript (cần tích hợp Firebase hoặc localStorage nếu muốn lưu)
+        const journalEntries = document.getElementById('journal-entries');
+        const journalForm = document.getElementById('journal-form');
+        const errorMessage = document.getElementById('error-message');
+
+        journalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const date = document.getElementById('entry-date').value;
+            const text = document.getElementById('entry-text').value;
+
+            if (date && text) {
+                const entryCard = document.createElement('div');
+                entryCard.classList.add('entry-card');
+                entryCard.innerHTML = `<h5>${date}</h5><p>${text}</p>`;
+                journalEntries.insertBefore(entryCard, journalEntries.firstChild);
+                journalForm.reset();
+                errorMessage.style.display = 'none';
+            } else {
+                errorMessage.textContent = 'Vui lòng nhập đầy đủ ngày và nội dung!';
+                errorMessage.style.display = 'block';
             }
         });
-        function loadJournal() {
-            const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-            document.getElementById('journal-list').innerHTML = entries.map(e => `
-                <div class="journal-entry">
-                    <strong>${e.date}</strong>: ${e.entry} (Cảm xúc: ${e.emotion}/10)
-                    <input type="range" min="1" max="10" value="${e.emotion}" onchange="updateEmotion('${e.date}', this.value)">
-                </div>
-            `).join('');
-            updateChart();
-        }
-        function updateEmotion(date, value) {
-            const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-            const entry = entries.find(e => e.date === date);
-            if (entry) entry.emotion = parseInt(value);
-            localStorage.setItem('journal', JSON.stringify(entries));
-            loadJournal();
-        }
-        function updateChart() {
-            const ctx = document.getElementById('emotion-chart').getContext('2d');
-            const entries = JSON.parse(localStorage.getItem('journal') || '[]');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: entries.map(e => e.date),
-                    datasets: [{
-                        label: 'Cảm xúc (1-10)',
-                        data: entries.map(e => e.emotion),
-                        borderColor: '#4caf50',
-                        fill: false
-                    }]
-                },
-                options: { responsive: true }
-            });
-        }
-        loadJournal();
+
+        // Load placeholder entries
+        journalEntries.innerHTML = '<div class="loading">Đang tải nhật ký...</div>';
+        setTimeout(() => {
+            journalEntries.innerHTML = '';
+        }, 1000);
     </script>
 </body>
 </html>
